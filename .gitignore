@@ -1,162 +1,108 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
+class Libro:
+    def __init__(self, titulo, autor, anio, genero, isbn):
+        # Inicializa un nuevo objeto Libro con los atributos especificados.
+        self.titulo = titulo
+        self.autor = autor
+        self.anio = anio
+        self.genero = genero
+        self.isbn = isbn
 
-# C extensions
-*.so
+    def __str__(self):
+        # Devuelve una representación en cadena del libro.
+        return f"{self.titulo}, {self.autor}, {self.anio}, {self.genero}, ISBN: {self.isbn}"
 
-# Distribution / packaging
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
 
-# PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
-*.manifest
-*.spec
+class Inventario:
+    def __init__(self):
+        # Inicializa un nuevo inventario como una lista vacía de libros.
+        self.libros = []
 
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
+    def agregar_libro(self, libro):
+        # Agrega un libro al inventario.
+        self.libros.append(libro)
 
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.nox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.py,cover
-.hypothesis/
-.pytest_cache/
-cover/
+    def eliminar_libro(self, isbn):
+        # Elimina un libro del inventario según el ISBN.
+        self.libros = [libro for libro in self.libros if libro.isbn != isbn]
 
-# Translations
-*.mo
-*.pot
+    def buscar_libro(self, titulo):
+        # Busca un libro en el inventario por su título.
+        for libro in self.libros:
+            if libro.titulo.lower() == titulo.lower():
+                return libro
+        return None
 
-# Django stuff:
-*.log
-local_settings.py
-db.sqlite3
-db.sqlite3-journal
+    def listar_libros(self):
+        # Lista todos los libros en el inventario.
+        if not self.libros:
+            print("No hay libros en el inventario.")
+        else:
+            for libro in self.libros:
+                print(libro)
 
-# Flask stuff:
-instance/
-.webassets-cache
 
-# Scrapy stuff:
-.scrapy
+def main():
+    # Crea una instancia del inventario.
+    inventario = Inventario()
 
-# Sphinx documentation
-docs/_build/
+    # Agrega ejemplos de libros al inventario.
+    libro1 = Libro("Cien Años de Soledad", "Gabriel García Márquez", 1967, "Realismo Mágico", "1234567890")
+    libro2 = Libro("Don Quijote de la Mancha", "Miguel de Cervantes", 1605, "Novela", "0987654321")
+    libro3 = Libro("1984", "George Orwell", 1949, "Distopía", "1122334455")
 
-# PyBuilder
-.pybuilder/
-target/
+    inventario.agregar_libro(libro1)
+    inventario.agregar_libro(libro2)
+    inventario.agregar_libro(libro3)
 
-# Jupyter Notebook
-.ipynb_checkpoints
+    # Bucle principal del programa para interactuar con el usuario.
+    while True:
+        # Muestra el menú de opciones.
+        print("\nMenú de opciones:")
+        print("1. Agregar libro")
+        print("2. Eliminar libro")
+        print("3. Buscar libro")
+        print("4. Listar libros")
+        print("5. Salir")
 
-# IPython
-profile_default/
-ipython_config.py
+        # Pide al usuario que elija una opción.
+        opcion = input("Elija una opción: ")
 
-# pyenv
-#   For a library or package, you might want to ignore these files since the code is
-#   intended to run in multiple environments; otherwise, check them in:
-# .python-version
+        if opcion == '1':
+            # Opción para agregar un nuevo libro.
+            titulo = input("Título: ")
+            autor = input("Autor: ")
+            anio = input("Año: ")
+            genero = input("Género: ")
+            isbn = input("ISBN: ")
+            libro = Libro(titulo, autor, anio, genero, isbn)
+            inventario.agregar_libro(libro)
+            print("Libro agregado.")
+        elif opcion == '2':
+            # Opción para eliminar un libro por ISBN.
+            isbn = input("ISBN del libro a eliminar: ")
+            inventario.eliminar_libro(isbn)
+            print("Libro eliminado.")
+        elif opcion == '3':
+            # Opción para buscar un libro por título.
+            titulo = input("Título del libro a buscar: ")
+            libro = inventario.buscar_libro(titulo)
+            if libro:
+                print("Libro encontrado:", libro)
+            else:
+                print("Libro no encontrado.")
+        elif opcion == '4':
+            # Opción para listar todos los libros en el inventario.
+            print("Listado de libros en el inventario:")
+            inventario.listar_libros()
+        elif opcion == '5':
+            # Opción para salir del programa.
+            print("Saliendo del programa.")
+            break
+        else:
+            # Mensaje de error para opciones no válidas.
+            print("Opción no válida. Intente de nuevo.")
 
-# pipenv
-#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
-#   However, in case of collaboration, if having platform-specific dependencies or dependencies
-#   having no cross-platform support, pipenv may install dependencies that don't work, or not
-#   install all needed dependencies.
-#Pipfile.lock
 
-# poetry
-#   Similar to Pipfile.lock, it is generally recommended to include poetry.lock in version control.
-#   This is especially recommended for binary packages to ensure reproducibility, and is more
-#   commonly ignored for libraries.
-#   https://python-poetry.org/docs/basic-usage/#commit-your-poetrylock-file-to-version-control
-#poetry.lock
-
-# pdm
-#   Similar to Pipfile.lock, it is generally recommended to include pdm.lock in version control.
-#pdm.lock
-#   pdm stores project-wide configurations in .pdm.toml, but it is recommended to not include it
-#   in version control.
-#   https://pdm.fming.dev/latest/usage/project/#working-with-version-control
-.pdm.toml
-.pdm-python
-.pdm-build/
-
-# PEP 582; used by e.g. github.com/David-OConnor/pyflow and github.com/pdm-project/pdm
-__pypackages__/
-
-# Celery stuff
-celerybeat-schedule
-celerybeat.pid
-
-# SageMath parsed files
-*.sage.py
-
-# Environments
-.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
-
-# Spyder project settings
-.spyderproject
-.spyproject
-
-# Rope project settings
-.ropeproject
-
-# mkdocs documentation
-/site
-
-# mypy
-.mypy_cache/
-.dmypy.json
-dmypy.json
-
-# Pyre type checker
-.pyre/
-
-# pytype static type analyzer
-.pytype/
-
-# Cython debug symbols
-cython_debug/
-
-# PyCharm
-#  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
-#  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
-#  and can be added to the global gitignore or merged into this file.  For a more nuclear
-#  option (not recommended) you can uncomment the following to ignore the entire idea folder.
-#.idea/
+if __name__ == "__main__":
+    # Punto de entrada del programa.
+    main()
